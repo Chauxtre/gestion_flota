@@ -1102,61 +1102,67 @@ else:
 
        st.subheader("🚨 Alertas Inteligentes")
 
-       conn = sqlite3.connect("flota.db")
 
-       df_vehiculos = pd.read_sql_query(
-            "SELECT * FROM vehiculos",
-            conn
-       )
+        conn = sqlite3.connect("flota.db")
 
-       df_viajes = pd.read_sql_query(
+        df_viajes = pd.read_sql_query(
             "SELECT * FROM viajes",
             conn
-       )
+        )
 
-       conn.close()
+        df = pd.read_sql_query(
+            "SELECT * FROM vehiculos",
+            conn
+        )
 
-       total = len(df_vehiculos)
+        df_pedidos = pd.read_sql_query(
+            "SELECT * FROM pedidos",
+            conn
+        )
 
-       disponibles = len(
+        conn.close()
+
+        total = len(df_vehiculos)
+
+        disponibles = len(
             df_vehiculos[
                 df_vehiculos["estado"] == "Disponible"
             ]
         )
 
-       ruta = len(
+        ruta = len(
             df_vehiculos[
                 df_vehiculos["estado"] == "En ruta"
             ]
         )
 
-       mantenimiento = len(
+        mantenimiento = len(
             df_vehiculos[
                 df_vehiculos["estado"] == "Mantenimiento"
             ]
         )
 
-       st.metric(
+        st.metric(
             "🚚 Total Vehículos",
             total
         )
 
-       st.metric(
+        st.metric(
             "✅ Disponibles",
             disponibles
         )
 
-       st.metric(
+        st.metric(
             "🛣️ En Ruta",
             ruta
         )
 
-       st.metric(
+        st.metric(
             "🛠️ Mantenimiento",
             mantenimiento
         )
 
-       st.bar_chart(
+        st.bar_chart(
             df_vehiculos["estado"].value_counts()
         )
 
@@ -1164,15 +1170,15 @@ else:
         # GRÁFICO ESTADOS VEHÍCULOS
         # ---------------------------------
 
-       estados = df["estado"].value_counts()
+        estados = df["estado"].value_counts()
 
-       fig1 = px.pie(
+        fig1 = px.pie(
             values=estados.values,
             names=estados.index,
             title="Estados de Vehículos"
         )
 
-       st.plotly_chart(
+        st.plotly_chart(
             fig1,
             use_container_width=True
         )
@@ -1180,16 +1186,16 @@ else:
         # PEDIDOS
         # ---------------------------------
 
-       conn = sqlite3.connect("flota.db")
+        conn = sqlite3.connect("flota.db")
 
-       df_pedidos = pd.read_sql_query(
+        df_pedidos = pd.read_sql_query(
             "SELECT * FROM pedidos",
             conn
         )
 
-       conn.close()
+        conn.close()
 
-       if len(df_pedidos) > 0:
+        if len(df_pedidos) > 0:
 
             estados_pedidos = (
                 df_pedidos["estado"]
